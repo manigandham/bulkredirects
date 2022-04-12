@@ -1,6 +1,5 @@
 ﻿using System.Net;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -19,7 +18,12 @@ public static class BuilderExtensions
 
         foreach (var redirect in redirects.Values)
         {
-            endpoints.MapGet(redirect.From, () => Results.Redirect(redirect.To, permanent: redirect.StatusCode == HttpStatusCode.MovedPermanently));
+            var permanent = redirect.StatusCode == HttpStatusCode.MovedPermanently;
+            endpoints.MapGet(redirect.From, context =>
+            {
+                context.Response.Redirect(redirect.To, permanent);
+                return Task.CompletedTask;
+            });
         }
 
         return endpoints;
@@ -36,7 +40,7 @@ public static class BuilderExtensions
             if (String.IsNullOrWhiteSpace(line) || line[0] == '#')
                 continue;
 
-            var parts = line.Split(new[] { ' ', '\t' }, StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+            var parts = line.Split(new[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries).Where(p => !string.IsNullOrWhiteSpace(p)).ToArray();
             if (parts.Length < 2)
                 continue;
 
@@ -47,7 +51,7 @@ public static class BuilderExtensions
             if (parts.Length == 3 && parts[2] == "302")
                 statusCode = HttpStatusCode.Found;
 
-            if (!redirects.TryAdd(from, new Redirect(from, to, statusCode)))
+            if (!redirects.TryAdd(from, new Redirect { From = from, To = to, StatusCode = statusCode }))
                 throw new Exception($"Redirect from '{from}' has multiple entries.");
         }
 
@@ -55,4 +59,9 @@ public static class BuilderExtensions
     }
 }
 
-internal record Redirect(string From, string To, HttpStatusCode StatusCode);
+internal class Redirect
+{
+    public string From { get; set; } = "";
+    public string To { get; set; } = "";
+    public HttpStatusCode StatusCode { get; set; }
+}
