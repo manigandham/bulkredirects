@@ -28,13 +28,12 @@ public static class BuilderExtensions
     private static List<Redirect> ParseFile(string filepath)
     {
         var redirects = new List<Redirect>();
-        var txt = File.ReadAllText(filepath);
+        var lines = File.ReadAllLines(filepath);
 
-        var lines = txt.Split(new[] { "\r\n", "\n" }, StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
         foreach (var line in lines)
         {
-            // skip comments
-            if (line[0] == '#')
+            // skip empty lines and comments
+            if (String.IsNullOrWhiteSpace(line) || line[0] == '#')
                 continue;
 
             var parts = line.Split(new[] { ' ', '\t' }, StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
