@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <PackageVersion>0.1.0</PackageVersion>
+        <PackageVersion>0.2.0</PackageVersion>
         <TargetFrameworks>net5.0;net6.0;netcoreapp3.1</TargetFrameworks>
         <Description>Setup redirects in bulk using a text configuration file</Description>
         <Authors>Mani Gandham</Authors>
@@ -27,6 +27,10 @@
 
     <ItemGroup>
         <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All"/>
     </ItemGroup>
 
 </Project>
