@@ -11,13 +11,17 @@ public static class BuilderExtensions
 {
     public static IEndpointRouteBuilder UseBulkRedirects(this IEndpointRouteBuilder endpoints, string filePath = "_redirects")
     {
-        var env = endpoints.ServiceProvider.GetService<IHostEnvironment>();
-        if (env is null)
-            throw new Exception("Cannot resolve IHostEnvironment to get the path to the redirects file.");
-
         var logger = endpoints.ServiceProvider.GetService<ILogger<BulkRedirects>>();
 
-        var redirects = BulkRedirects.ParseFile(Path.Combine(env.ContentRootPath, filePath));
+        var env = endpoints.ServiceProvider.GetService<IHostEnvironment>();
+        if (env is null)
+            throw new Exception("Cannot resolve IHostEnvironment service.");
+
+        filePath = Path.Combine(env.ContentRootPath, filePath);
+        if (!File.Exists(filePath))
+            throw new Exception($"Redirects file '{filePath}' not found.");
+
+        var redirects = BulkRedirects.ParseFile(filePath);
         foreach (var redirect in redirects.Values)
         {
             logger?.LogDebug("Bulk redirect: {from} -> {to}", redirect.From, redirect.To);

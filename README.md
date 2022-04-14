@@ -1,6 +1,6 @@
 # Bulk Redirects
 
-Serve multiple redirects from a single text config file. This is based on the `_redirects` format from [Netlify](https://docs.netlify.com/routing/redirects/#syntax-for-the-redirects-file).
+Serve multiple redirects from a single text config file. Based on the `_redirects` format from [Netlify](https://docs.netlify.com/routing/redirects/#syntax-for-the-redirects-file).
 
 Built for `net6.0`, `net5.0`, `netcoreapp3.1`.
 
@@ -29,8 +29,8 @@ app.Run();
 
 ## Config
 
--   Text config file named `_redirects` in the root application directory.
--   One redirect per line with format: `source` path, then `destination` path, then optional `status` code, all separated by spaces or tabs.
+-   Looks for `_redirects` file in the [application content root](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/host/generic-host?view=aspnetcore-6.0#contentroot) by default, but custom path can be specified.
+-   One redirect per line with format: `source` path, `destination` path, and optional `status` code, all separated by spaces or tabs.
 -   Blank lines and lines starting with `#` are ignored.
 -   _Note: Ensure that it's included in the build output._
 
@@ -40,12 +40,17 @@ Example file:
 # comments and blank lines are allowed
 
 /page1  /gohereinstead
-/page2  /gosomewhereelse   302
+/page2  /goheretemporarily   302
 /remotepage   https://github.com
 
 ```
 
 ## Changelog
+
+**0.4.0**
+
+-   Renamed to `UseBulkRedirects`.
+-   Custom file path and access checks.
 
 **0.3.0**
 

@@ -9,6 +9,6 @@ app.UseStaticFiles();
 app.UseRouting();
 app.MapGet("/", () => "hello");
 app.MapGet("/world", () => "world");
-app.UseBulkRedirects();
+app.UseBulkRedirects(filePath: "_redirects");
 
 app.Run();
