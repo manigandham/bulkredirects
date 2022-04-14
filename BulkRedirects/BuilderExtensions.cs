@@ -9,7 +9,7 @@ namespace BulkRedirects;
 
 public static class BuilderExtensions
 {
-    public static IEndpointRouteBuilder MapBulkRedirects(this IEndpointRouteBuilder endpoints, string filePath = "_redirects")
+    public static IEndpointRouteBuilder UseBulkRedirects(this IEndpointRouteBuilder endpoints, string filePath = "_redirects")
     {
         var env = endpoints.ServiceProvider.GetService<IHostEnvironment>();
         if (env is null)

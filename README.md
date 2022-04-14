@@ -21,7 +21,8 @@ Add to application routing:
 ```csharp
 var builder = WebApplication.CreateBuilder(args);
 
-app.MapBulkRedirects(); // place where needed in the pipeline, the end is recommeneded to avoid interfering with other routes
+// place where needed in the pipeline
+app.UseBulkRedirects();
 
 app.Run();
 ```
@@ -36,7 +37,6 @@ app.Run();
 Example file:
 
 ```
-
 # comments and blank lines are allowed
 
 /page1  /gohereinstead
